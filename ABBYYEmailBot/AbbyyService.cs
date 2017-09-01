@@ -28,14 +28,15 @@ namespace ABBYYEmailBot
             roleType = 6;
             stationType = 2;
             sessionID = service.OpenSession(roleType, stationType);
-            projectID = OpenTestProject();
+            projectID = OpenProject();
             while (true)
             {
                 MonitorImports();
                 MonitorExports();
             }
         }
-        private int OpenTestProject()
+
+        private int OpenProject()
         {
             try
             {
@@ -63,21 +64,29 @@ namespace ABBYYEmailBot
             bool isMonitoring = true;
             while (isMonitoring)
             {
-                Flexicapture11.Batch[] Batches = service.GetBatches(projectID, sessionID, false);
-
-                foreach (Flexicapture11.Batch batch in Batches)
+                try
                 {
-                    if (batch.StageExternalId == 200)
+                    Flexicapture11.Batch[] Batches = service.GetBatches(projectID, sessionID, false);
+
+                    foreach (Flexicapture11.Batch batch in Batches)
                     {
-                        //Batch is being processed
-                        //System.Windows.MessageBox.Show(batch.Name + "ABBYY is Processing now!");
-                        GetEmailSender(batch, SenderStatus.PROCESSING); // get the email of the thing being processed in case we want to inform that its being procssed
-                        Model.EmailBot importEmail = new Model.EmailBot(emailSender);//send email
-                                                                                     //keeps looping need to fix this
-                        isMonitoring = false;
-                        break;
+                        if (batch.StageExternalId == 200)
+                        {
+                            //Batch is being processed
+                            //System.Windows.MessageBox.Show(batch.Name + "ABBYY is Processing now!");
+                            GetEmailSender(batch, SenderStatus.PROCESSING); // get the email of the thing being processed in case we want to inform that its being procssed
+                            EmailBot importEmail = new EmailBot(emailSender);//send email
+                            isMonitoring = false;
+                            break;
+                        }
                     }
                 }
+                catch (Exception exception)
+                {
+
+                    string msg = exception.Message;
+                }
+               
             }
         }
         private void MonitorExports()
@@ -91,7 +100,7 @@ namespace ABBYYEmailBot
                     if (batch.StageExternalId == 800)
                     {
                         GetEmailSender(batch, SenderStatus.SUCCESS);
-                        ABBYYEmailBot.Model.EmailBot email = new Model.EmailBot(emailSender);
+                        ABBYYEmailBot.EmailBot email = new EmailBot(emailSender);
                         isMonitoring = false;
                         break;
                     }

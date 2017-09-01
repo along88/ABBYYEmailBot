@@ -27,18 +27,19 @@ namespace ABBYYEmailBot
                 case SenderStatus.NONE:
                     break;
                 case SenderStatus.SUCCESS:
-                    EmailMessage(", was SUCCESSFUL!", ", your submission was a Success and is now ready for use! ");
+                    EmailMessage(", SUCCESSFUL!", ", was a Success and is now ready for use! ");
                     break;
                 case SenderStatus.FAIL:
-                    EmailMessage(", FAILED! Open for more details", ", I was unable to process your submission, It is undetermined at this time what caused the issue.Please email Tech Services or try again! ");
+                    EmailMessage(", FAILED! Open for more details", ", ABBYY was unable to process your submission, It is undetermined at this time what caused the issue.Please email Tech Services or try again! ");
                     break;
                 case SenderStatus.PROCESSING:
-                    EmailMessage(", is being Processed. Please Wait.", string.Format(" was recieved  and is currently being processed, I will notify you when I have completed processing this submission! Feel Free to email Tech Services if it has been more than 3 minutes since receiving this email and you have not recieved a status update from me!" + Environment.NewLine +
-                        "Some fun facts about me(ABBY) while you wait:" + Environment.NewLine +
-                        "\u2022 I am able to read most 140 documents to some degree of accuracy, currently I struggle with anything after the year 2010!" + Environment.NewLine +
-                        "\u2022 I Will try to auto select the Construction Type, Burglar, and Fire Alarms for you if I find it on the 140 you submit!" + Environment.NewLine +
-                        "\u2022 I won't be able to recognize any emails you send to me with an Excel file in it =("+Environment.NewLine+
-                        "\u2022 I work best for you when you have a workstation with a lot of locations, anything less than 5 submissions you may be better processing manually!"));
+                    EmailMessage(", IN-PROGRESS.", string.Format(" was recieved and is currently being processed, a notification email will follow once ABBYY has completed processing this submission! Feel Free to email Tech Services if it has been more than 3 minutes since receiving this email and you have not recieved a status update!" + Environment.NewLine +
+                        "Some fun facts about ABBYY while you wait:" + Environment.NewLine +
+                        "\u2022 ABBYY is able to read most 140 documents to some degree of accuracy, currently ABBYY struggles with anything after the year 2010!" + Environment.NewLine +
+                        "\u2022 ABBYY Will try to auto select the Construction Type, Burglar Alarms, and Fire Alarms for you if it finds them on the 140 you submit!" + Environment.NewLine +
+                        "\u2022 ABBYY won't be able to recognize any emails you send with an Excel file attachment =("+Environment.NewLine+
+                        "\u2022 ABBYY works best for you when you have a workstation with a lot of locations, anything less than 5 submissions you may be better off processing manually!" + Environment.NewLine +
+                    "Please Continue to Send us your feedback and errors so we can make ABBYY great together!"));
                     break;
                 default:
                     break;
@@ -61,8 +62,6 @@ namespace ABBYYEmailBot
             }
             return application;
         }
-
-
         private void EmailMessage(string subject, string body)
         {
             emailSubject = subject;
@@ -72,11 +71,11 @@ namespace ABBYYEmailBot
         {
             try
             {
-                if (sender.name.ToLower().Equals("along@wkfc.com")) //this protects me from sending emails by accident to other active users besides me
+                if (sender.name != null) //this protects me from sending emails by accident to other active users besides me
                 {
                     MailItem mailItem = (MailItem)application.Session.OpenSharedItem(@"C:\Users\along\Documents\ConsoleWEBAPI\ConsoleWEBAPI\ABBYYSuccessEmail.msg");
                     mailItem.Subject = "CN#:"+sender.ctrlNumber + emailSubject;
-                    mailItem.Body = sender.ctrlNumber + emailBody;
+                    mailItem.Body = "CN#:" + sender.ctrlNumber + emailBody;
                     mailItem.To = sender.name;
                     mailItem.Send();
                     //debugText = "SUCCESS!";

@@ -1260,11 +1260,18 @@ namespace ABBYYEmailBot.Flexicapture11 {
         [return: System.Xml.Serialization.XmlArrayAttribute("batches", IsNullable=true)]
         [return: System.Xml.Serialization.XmlArrayItemAttribute(IsNullable=false)]
         public Batch[] GetBatches(int projectId, int sessionId, bool onlyPrivateBatches) {
-            object[] results = this.Invoke("GetBatches", new object[] {
+            try
+            {
+                object[] results = this.Invoke("GetBatches", new object[] {
                         projectId,
                         sessionId,
                         onlyPrivateBatches});
-            return ((Batch[])(results[0]));
+                return ((Batch[])(results[0]));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }   
         }
         
         /// <remarks/>

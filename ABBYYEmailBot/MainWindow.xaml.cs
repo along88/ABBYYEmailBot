@@ -29,7 +29,16 @@ namespace ABBYYEmailBot
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
             textBlock.Text = "Monitoring";
-            AbbyyService abbyyProject = new AbbyyService();
+            try
+            {
+                AbbyyService abbyyProject = new AbbyyService();
+            }
+            catch (Exception exception)
+            {
+
+                string except = exception.StackTrace;
+            }
+           
         }
     }
 }
